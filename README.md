@@ -1,7 +1,7 @@
 # Recon Agent: AI Finance Controller & Multi-Way Settlement Reconciliation
 
 [![Continuous Integration](https://github.com/ravigang/recon_agent/actions/workflows/ci.yml/badge.svg)](https://github.com/ravigang/recon_agent/actions)
-[![Code Quality](https://github.com/ravigang/recon_agent/actions/workflows/code-quality.yml/badge.svg)](https://github.com/ravigang/recon_agent/actions)
+
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -202,7 +202,7 @@ Edit `.env`:
 GEMINI_API_KEY=your_gemini_api_key_here
 
 # Model selection
-GEMINI_MODEL=gemini-3.6-flash
+GEMINI_MODEL=gemini-3.6-flash model
 
 # Logging and environment
 ENVIRONMENT=development
