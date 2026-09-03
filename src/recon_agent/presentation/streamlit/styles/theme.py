@@ -1,22 +1,9 @@
-import os
-import pandas as pd
+"""Styling tokens and CSS for the Streamlit dashboard."""
+
 import streamlit as st
-from google import genai
-from dotenv import load_dotenv
 
-# Page Config
-st.set_page_config(
-    page_title="AI Ledger & Settlement Reconciliation",
-    page_icon="💳",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-# Ultra-Premium SaaS Dashboard — Design System CSS
 CUSTOM_CSS = """
 <style>
-
-
 /* ─── HIDE DEPLOY BUTTON & MENU ONLY (KEEP SIDEBAR TOGGLE) ──────────── */
 header[data-testid="stHeader"] {
     background: transparent !important;
@@ -46,7 +33,6 @@ footer {
     visibility: visible !important;
     color: var(--text-hi, #ffffff) !important;
 }
-
 
 /* ─── FONTS & ICON SETS ──────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
@@ -96,7 +82,7 @@ div[data-testid="stDecoration"] { display: none !important; }
 div[data-testid="collapsedControl"] { color: var(--text-md) !important; }
 div[data-testid="stHorizontalBlock"] { gap: 1rem !important; align-items: stretch !important; }
 
-/* ─── MATERIAL ICONS PRESERVATION (FIX BROKEN ICONS) ─── */
+/* ─── MATERIAL ICONS PRESERVATION ─── */
 [data-testid="stIconMaterial"],
 [class*="material-symbols"],
 [class*="material-icons"],
@@ -113,7 +99,6 @@ svg {
     -webkit-font-smoothing: antialiased !important;
 }
 
-/* Base typography applied safely without breaking icon spans */
 p, label, .stMarkdown p {
     font-family: 'Inter', -apple-system, sans-serif !important;
     color: var(--text-hi);
@@ -146,7 +131,7 @@ section[data-testid="stSidebar"] p {
     font-size: 0.85rem !important;
 }
 
-/* ─── FILE UPLOADER CLEANUP (NO OVERLAPPING TEXT) ────── */
+/* ─── FILE UPLOADER CLEANUP ────── */
 [data-testid="stFileUploader"] {
     position: relative !important;
 }
@@ -164,7 +149,6 @@ section[data-testid="stSidebar"] p {
     border-color: var(--indigo) !important;
 }
 
-/* Remove any pseudo elements injecting text into file uploader */
 [data-testid="stFileUploaderDropzone"]::before,
 [data-testid="stFileUploaderDropzone"]::after,
 [data-testid="stFileUploader"]::before,
@@ -319,7 +303,6 @@ div[data-testid="stMetricLabel"] p {
     letter-spacing: 0.08em !important;
 }
 
-/* Gradient KPI numbers with robust flex alignment */
 div[data-testid="stMetricValue"] {
     position: relative !important;
     display: flex !important;
@@ -445,8 +428,7 @@ div.stButton > button:active {
     color: #FCA5A5;
 }
 
-
-/* ─── EXPANDER STABILIZATION (FIXED ICON LEAK) ────────────── */
+/* ─── EXPANDER STABILIZATION ────────────── */
 .stExpander,
 [data-testid="stExpander"] {
     background: var(--bg-card) !important;
@@ -464,7 +446,6 @@ div.stButton > button:active {
     border-color: var(--border-mid) !important;
 }
 
-/* Remove unwanted pseudo-elements */
 .stExpander summary::before,
 .stExpander summary::after,
 .streamlit-expanderHeader::before,
@@ -481,7 +462,6 @@ div.stButton > button:active {
     cursor: pointer !important;
 }
 
-/* Apply font to summary text ONLY (Exclude Icon Spans) */
 .stExpander summary p,
 .streamlit-expanderHeader p {
     position: static !important;
@@ -493,67 +473,10 @@ div.stButton > button:active {
     color: var(--text-hi) !important;
 }
 
-/* Force Material Font on Expander Icon */
 [data-testid="stExpanderToggleIcon"],
 [data-testid="stExpanderToggleIcon"] * {
     font-family: 'Material Symbols Outlined', 'Material Symbols Rounded' !important;
 }
-
-
-# /* ─── EXPANDER STABILIZATION (NO OVERLAPPING ARROWS/TEXT) ── */
-# .stExpander,
-# [data-testid="stExpander"] {
-#     background: var(--bg-card) !important;
-#     border: 1px solid var(--border-dim) !important;
-#     border-radius: 10px !important;
-#     margin-bottom: 0.85rem !important;
-#     box-shadow: none !important;
-#     transition: border-color 0.2s ease !important;
-#     overflow: visible !important;
-#     position: relative !important;
-# }
-
-# .stExpander:hover,
-# [data-testid="stExpander"]:hover {
-#     border-color: var(--border-mid) !important;
-# }
-
-# /* Remove all pseudo-elements from expander headers */
-# .stExpander summary::before,
-# .stExpander summary::after,
-# .streamlit-expanderHeader::before,
-# .streamlit-expanderHeader::after,
-# [data-testid="stExpanderToggleIcon"]::before,
-# [data-testid="stExpanderToggleIcon"]::after {
-#     display: none !important;
-#     content: none !important;
-# }
-
-# .stExpander summary,
-# .streamlit-expanderHeader {
-#     position: relative !important;
-#     display: flex !important;
-#     align-items: center !important;
-#     cursor: pointer !important;
-#     font-family: 'Space Grotesk', sans-serif !important;
-#     font-size: 0.9rem !important;
-#     font-weight: 600 !important;
-#     color: var(--text-hi) !important;
-#     letter-spacing: -0.01em !important;
-# }
-
-# /* Ensure summary title text flows naturally without position absolute */
-# .stExpander summary p,
-# .stExpander summary span,
-# .streamlit-expanderHeader p {
-#     position: static !important;
-#     display: inline !important;
-#     margin: 0 !important;
-#     font-family: 'Space Grotesk', sans-serif !important;
-#     font-size: 0.9rem !important;
-#     font-weight: 600 !important;
-#     color: var(--text-hi) !important;
-# }
 
 /* ─── EXCEPTION BREAKDOWN GRID ───────────────────────── */
 .audit-grid {
@@ -648,252 +571,7 @@ div.stButton > button:active {
 </style>
 """
 
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
-load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
-
-# Caching the AI reasoning function to avoid repeated API calls
-@st.cache_data(show_spinner=False)
-def get_ai_reasoning(razorpay_id, expected_amount, actual_amount, issue):
-    if not api_key:
-        return "API Key missing in .env file."
-    try:
-        client = genai.Client(api_key=api_key)
-        prompt = f"""
-        You are an expert AI Finance Controller auditing payment reconciliation discrepancies.
-        Analyze this unmatched item and give a concise 1-sentence financial explanation of why this error happened:
-        - Razorpay ID: {razorpay_id}
-        - Expected Amount: ₹{expected_amount}
-        - Actual Bank Amount: ₹{actual_amount}
-        - System Flag: {issue}
-        Provide only the direct financial reason (e.g. MDR fee deduction, processing delay, chargeback, or pending settlement).
-        """
-        response = client.models.generate_content(
-            model='gemini-3.6-flash',
-            contents=prompt,
-        )
-        return response.text.strip()
-    except Exception as e:
-
-        err_str = str(e)
-    # Professional Quota & Rate Limit handling
-    if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "quota" in err_str.lower():
-        return (
-            "API Quota Exceeded:Daily request limit reached"
-        )
-    else:
-        return f"AI Diagnostic Unavailable:System encountered an unexpected response. ({err_str[:80]}...)"
-        # return f"AI Analysis failed: {str(e)}"
-
-
-# Main Reconciliation Processing with Caching
-@st.cache_data(show_spinner=False)
-def process_reconciliation(razorpay_df_dict, bank_df_dict):
-    matched = []
-    exceptions = []
-    used_bank_indices = set()
-
-    for r_txn in razorpay_df_dict:
-        found_match = False
-        for idx, b_txn in enumerate(bank_df_dict):
-            if idx in used_bank_indices:
-                continue
-
-            id_match = r_txn['txn_id'] in b_txn['bank_ref']
-            amount_match = (r_txn['amount'] == b_txn['amount'])
-
-            if id_match and amount_match:
-                matched.append({
-                    "Razorpay ID": r_txn['txn_id'],
-                    "Bank Ref": b_txn['bank_ref'],
-                    "Amount": f"₹{r_txn['amount']}",
-                    "Match Status": "EXACT_MATCH"
-                })
-                used_bank_indices.add(idx)
-                found_match = True
-                break
-
-            elif id_match and not amount_match:
-                issue_text = f"Amount Discrepancy (Expected ₹{r_txn['amount']}, got ₹{b_txn['amount']})"
-                ai_exp = get_ai_reasoning(r_txn['txn_id'], r_txn['amount'], b_txn['amount'], issue_text)
-                
-                ex_item = {
-                    "razorpay_id": r_txn['txn_id'],
-                    "expected_amount": r_txn['amount'],
-                    "actual_amount": b_txn['amount'],
-                    "issue": issue_text,
-                    "ai_explanation": ai_exp
-                }
-                exceptions.append(ex_item)
-                used_bank_indices.add(idx)
-                found_match = True
-                break
-
-        if not found_match:
-            issue_text = "Transaction missing in Bank Statement"
-            ai_exp = get_ai_reasoning(r_txn['txn_id'], r_txn['amount'], 0.0, issue_text)
-            
-            ex_item = {
-                "razorpay_id": r_txn['txn_id'],
-                "expected_amount": r_txn['amount'],
-                "actual_amount": 0.0,
-                "issue": issue_text,
-                "ai_explanation": ai_exp
-            }
-            exceptions.append(ex_item)
-
-    return matched, exceptions
-
-# Page Header
-st.markdown("""
-<div class="dash-header">
-    <div>
-        <h1 class="dash-title">AI Ledger &amp; Settlement Reconciliation</h1>
-        <p class="dash-subtitle">Automated multi-way cross-verification of payment gateway ledgers against bank statements with Gemini audit intelligence.</p>
-    </div>
-    <div>
-        <span class="dash-live-badge">
-            <span class="live-dot"></span>
-            Live Audit Engine
-        </span>
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Sidebar Configuration
-with st.sidebar:
-    st.markdown("### 📁 Data Ingestion")
-    st.markdown("<p style='font-size:0.83rem;color:#64748B;margin-top:-0.4rem;margin-bottom:1rem;'>Upload ledger statements or run with preloaded sandbox datasets.</p>", unsafe_allow_html=True)
-
-    razorpay_file = st.file_uploader("Gateway Ledger (Razorpay CSV)", type=["csv"], help="Upload gateway settlement export")
-    bank_file = st.file_uploader("Bank Statement (CSV)", type=["csv"], help="Upload corresponding bank feed")
-
-    if not razorpay_file or not bank_file:
-        st.markdown("""
-        <div class="sb-card">
-            ⚡ <strong style="color:#A5B4FC;">Sandbox Mode</strong><br>
-            Active: <code>razorpay_ledger.csv</code> &amp; <code>bank_statement.csv</code>
-        </div>
-        """, unsafe_allow_html=True)
-        razorpay_df = pd.read_csv("razorpay_ledger.csv")
-        bank_df = pd.read_csv("bank_statement.csv")
-    else:
-        razorpay_df = pd.read_csv(razorpay_file)
-        bank_df = pd.read_csv(bank_file)
-
-    st.markdown("---")
-    st.markdown("### ⚙️ Engine Parameters")
-    st.markdown(f"<p style='font-size:0.78rem;color:#475569;line-height:1.7;'>Audit Model: <code>gemini-3.6-flash</code><br>Rule Precision: <code>Strict 1:1</code><br>API Gateway: {'<span style=\"color:#34D399;font-weight:700;\">CONNECTED</span>' if api_key else '<span style=\"color:#FCA5A5;font-weight:700;\">MISSING KEY</span>'}</p>", unsafe_allow_html=True)
-
-# Data Ingestion Pre-Run Overview Cards
-ingest_col1, ingest_col2 = st.columns(2)
-with ingest_col1:
-    st.markdown(f"""
-    <div class="ingest-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">
-            <span class="ingest-card-label">Gateway Ledger</span>
-            <span class="pill pill-info">Razorpay CSV</span>
-        </div>
-        <div class="ingest-card-count">{len(razorpay_df)} <span class="ingest-card-sub">records loaded</span></div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with ingest_col2:
-    st.markdown(f"""
-    <div class="ingest-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;">
-            <span class="ingest-card-label">Bank Settlement Feed</span>
-            <span class="pill pill-info">Statement CSV</span>
-        </div>
-        <div class="ingest-card-count">{len(bank_df)} <span class="ingest-card-sub">records loaded</span></div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Glowing Gradient Run Button
-btn_col1, btn_col2 = st.columns([1, 4])
-with btn_col1:
-    run_audit = st.button("⚡ Run Audit Reconciliation", type="primary", use_container_width=True)
-
-if run_audit:
-    with st.spinner("Executing reconciliation rules and querying Gemini audit diagnostics..."):
-        matched, exceptions = process_reconciliation(
-            razorpay_df.to_dict('records'),
-            bank_df.to_dict('records')
-        )
-
-        match_rate = (len(matched) / len(razorpay_df) * 100) if len(razorpay_df) > 0 else 0
-
-        st.markdown("<div style='margin-top:1.25rem;'></div>", unsafe_allow_html=True)
-
-        # Glowing Gradient KPI Metric Cards
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Total Ingested", f"{len(razorpay_df)}", help="Records in primary gateway ledger")
-        col2.metric("Exact Matches", f"{len(matched)}", delta=f"{match_rate:.0f}% rate")
-        col3.metric("Discrepancies", f"{len(exceptions)}", delta=f"-{len(exceptions)}" if exceptions else "0", delta_color="inverse")
-        col4.metric("AI Diagnosed", f"{len(exceptions)}", delta="100% verified")
-
-        st.markdown("<div style='margin-top:0.5rem;'></div>", unsafe_allow_html=True)
-
-        # ── Section 1: Matched Settlements ────────────────────────
-        st.markdown(f"""
-        <div class="saas-section-header">
-            <span class="saas-section-title">Matched Settlements</span>
-            <span class="pill pill-success">{len(matched)} EXACT_MATCH verified</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-        if matched:
-            st.dataframe(
-                pd.DataFrame(matched),
-                use_container_width=True,
-                hide_index=True
-            )
-        else:
-            st.info("No exact matching transactions found in this run.")
-
-        # ── Section 2: Exceptions & AI Diagnostic Audit ───────────
-        st.markdown(f"""
-        <div class="saas-section-header" style="margin-top:2rem;">
-            <span class="saas-section-title">Exceptions &amp; AI Diagnostic Audit</span>
-            <span class="pill pill-warning">{len(exceptions)} discrepancies flagged</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-        if exceptions:
-            for e in exceptions:
-                is_missing = "missing" in e['issue'].lower()
-                pill_class = "pill-danger" if is_missing else "pill-warning"
-                badge_label = "MISSING_SETTLEMENT" if is_missing else "AMOUNT_MISMATCH"
-                amount_color = "#FCA5A5" if is_missing else "#FCD34D"
-
-                expander_title = f"TXN ID: {e['razorpay_id']}  —  {e['issue']}"
-
-                with st.expander(expander_title, expanded=True):
-                    st.markdown(f"""
-                    <div class="audit-grid">
-                        <div>
-                            <div class="audit-cell-label">Gateway ID</div>
-                            <div class="audit-cell-value">{e['razorpay_id']}</div>
-                        </div>
-                        <div>
-                            <div class="audit-cell-label">Expected Amount</div>
-                            <div class="audit-cell-value" style="color:#93C5FD;">₹{e['expected_amount']:,.2f}</div>
-                        </div>
-                        <div>
-                            <div class="audit-cell-label">Bank Settlement</div>
-                            <div class="audit-cell-value" style="color:{amount_color};">₹{e['actual_amount']:,.2f}</div>
-                        </div>
-                        <div>
-                            <div class="audit-cell-label">Audit Status</div>
-                            <span class="pill {pill_class}">{badge_label}</span>
-                        </div>
-                    </div>
-                    <div class="ai-diag-box">
-                        <div class="ai-diag-label">🤖 Gemini Finance Controller Diagnostic</div>
-                        <p class="ai-diag-body">{e['ai_explanation']}</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-        else:
-            st.success("✅ All transactions reconciled cleanly — zero discrepancies found.")
-
+def apply_theme() -> None:
+    """Inject custom styles into the active Streamlit app."""
+    st.markdown(CUSTOM_CSS, unsafe_allow_html=True)

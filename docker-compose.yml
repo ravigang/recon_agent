@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  recon-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recon_agent_app
+    ports:
+      - "8501:8501"
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.6-flash}
+    volumes:
+      - ./data/generated:/app/data/generated
+    restart: unless-stopped

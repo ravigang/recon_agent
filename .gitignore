@@ -1,5 +1,35 @@
+# Python Virtual Environments
 .venv/
 venv/
-.env
+env/
+ENV/
+
+# Python Cache & Bytecode
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Distribution & Packaging
+dist/
+build/
+*.egg-info/
+eggs/
+.eggs/
+
+# Secrets & Environment Variables
+.env
+.env.local
+.streamlit/secrets.toml
+
+# Generated Datasets (preserve directory structure)
+data/generated/*
+!data/generated/.gitkeep
+
+# IDE & OS specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
